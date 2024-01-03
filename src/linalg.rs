@@ -20,6 +20,19 @@ pub fn gauss_jordan<F: Float>(arr: &mut Array2<F>) {
     }
 }
 
+pub fn transpose<F: Float>(arr: &Array2<F>) -> Array2<F> {
+    let ni = arr.shape()[0];
+    let nj = arr.shape()[1];
+    let mut res = Array2::zeros((nj, ni));
+
+    for j in 0..ni {
+        for i in 0..nj {
+            res[(i, j)] = arr[(j, i)];
+        }
+    }
+    res
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -41,5 +54,15 @@ mod tests {
         gauss_jordan(&mut input);
 
         assert_eq!(input, output);
+    }
+
+    #[test]
+    fn test_transpose() {
+        let input: Array2<f32> =
+            Array::from_shape_vec((2, 3), vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0]).unwrap();
+        let output: Array2<f32> =
+            Array::from_shape_vec((3, 2), vec![1.0, 4.0, 2.0, 5.0, 3.0, 6.0]).unwrap();
+
+        assert_eq!(transpose(&input), output);
     }
 }
