@@ -1,9 +1,13 @@
-#![allow(dead_code)]
-
 use ndarray::Array2;
 use num::Float;
 
-/// Gauss-Jordan Elimination
+/// Gaussian Elimination
+///
+/// # References
+///  - [Wikipedia: Guassian elimination](https://en.wikipedia.org/wiki/Gaussian_elimination)
+///  - [LibreTexts Mathematics: Solving Systems with Gauss-Jordan
+///  Elimination](https://math.libretexts.org/Courses/Community_College_of_Denver/MAT_1320_Finite_Mathematics/03%3A_Solving_Systems_of_Equations/3.03%3A_Solving_Systems_with_Gaussian_Elimination)
+/// - [Brilliant: Gauss-Jordan Elimination](https://brilliant.org/wiki/gaussian-elimination/)
 pub fn gauss_jordan<F: Float>(arr: &mut Array2<F>) {
     for k in 0..arr.nrows() {
         let pivot = arr[(k, k)];

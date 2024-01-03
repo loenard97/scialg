@@ -19,6 +19,11 @@ use num::Complex;
 /// assert!((gamma(Complex::new(1.0, 0.0)) - Complex::new(1.0, 0.0)).norm() < tol);
 /// assert!((gamma(Complex::new(5.0, 0.0)) - Complex::new(24.0, 0.0)).norm() < tol);
 /// ```
+///
+/// # References
+///  - [Wikipedia: Lanczos approximation](https://en.wikipedia.org/wiki/Lanczos_approximation)
+///  - [Wolfram MathWorld: Lanczos
+///  approximation](https://mathworld.wolfram.com/LanczosApproximation.html)
 pub fn gamma(z0: Complex<f64>) -> Complex<f64> {
     let pi = std::f64::consts::PI;
     let coeffs = [
@@ -47,6 +52,11 @@ pub fn gamma(z0: Complex<f64>) -> Complex<f64> {
 }
 
 /// Calcuate the beta function of (z, w)
+///
+/// The beta function can be computed as: beta(z, w) = gamma(z) * gamma(w) / gamma(z + w)
+///
+/// # References
+///  - [Wikipedia: Beta function](https://en.wikipedia.org/wiki/Beta_function)
 pub fn beta(z: Complex<f64>, w: Complex<f64>) -> Complex<f64> {
     gamma(z) * gamma(w) / gamma(z + w)
 }
@@ -65,6 +75,9 @@ pub fn beta(z: Complex<f64>, w: Complex<f64>) -> Complex<f64> {
 /// assert_eq!(factorial(5), 120);
 /// assert_eq!(factorial(6), 720);
 /// ```
+///
+/// # References
+///  - [Wikipedia: Factorial](https://en.wikipedia.org/wiki/Factorial)
 pub fn factorial(n: i64) -> i64 {
     let z: Complex<f64> = Complex::new((n + 1) as f64, 0.0);
     let res = gamma(z);
@@ -85,6 +98,9 @@ pub fn factorial(n: i64) -> i64 {
 /// assert_eq!(binomial(3, 5), 0);
 /// assert_eq!(binomial(5, 3), 10);
 /// ```
+///
+/// # References
+///  - [Wikipedia: Binomial distribution](https://en.wikipedia.org/wiki/Binomial_distribution)
 pub fn binomial(n: i64, k: i64) -> i64 {
     if k > n {
         return 0;

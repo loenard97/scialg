@@ -12,6 +12,10 @@ use num::Float;
 ///
 /// assert_eq!(neville(&xs, &ys, 1.0), 2.0);
 /// ```
+///
+/// # References
+///  - [Wikipedia: Neville's Algorithm](https://en.wikipedia.org/wiki/Neville%27s_algorithm)
+///  - [Wolfram MathWorld: Neville's Algorithm](https://mathworld.wolfram.com/NevillesAlgorithm.html)
 pub fn neville<F: Float>(xs: &[F], ys: &[F], x: F) -> F {
     let n = xs.len();
     let mut q = ys.to_vec();

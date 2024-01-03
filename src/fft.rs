@@ -1,5 +1,3 @@
-#![allow(dead_code)]
-
 use ndarray::Array1;
 use num::complex::Complex;
 
@@ -8,6 +6,13 @@ use num::complex::Complex;
 /// # Note
 /// This algorithm takes O(N^2) computations.
 /// Use the function scialg::fft::fft instead, which takes O(n log2(n)) computations.
+///
+/// # References
+///  - [Fourier transforms (Harvard
+///  lecture)](https://scholar.harvard.edu/files/schwartz/files/lecture8-fouriertransforms.pdf)
+///  - [Wikipedia: Fourier transform](https://en.wikipedia.org/wiki/Fourier_transform)
+///  - [Wikipedia: Discrete Fourier
+///  transform](https://en.wikipedia.org/wiki/Discrete_Fourier_transform)
 pub fn ft(arr: &Array1<f32>) -> Vec<Complex<f32>> {
     let pi = std::f32::consts::PI;
     let cn = arr.len() as f32;
@@ -27,6 +32,7 @@ pub fn ft(arr: &Array1<f32>) -> Vec<Complex<f32>> {
 }
 
 /// Bit reverse number *a* with a given *bit_size*
+/// This is used in the FFT algorithm.
 ///
 /// # Example
 /// ```
