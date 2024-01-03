@@ -2,10 +2,16 @@
 name = "scialg"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A collection of scientific algorithms"
+authors = ["Dennis Lönard"]
+homepage = "https://github.com/loenard97/scialg"
+repository = "https://github.com/loenard97/scialg"
+keywords = ["algorithms", "science"]
+readme = "README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 ndarray = "0.15.6"
-ndarray-rand = "0.14.0"
 num = "0.4.1"
