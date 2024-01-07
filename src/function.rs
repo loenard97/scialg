@@ -1,6 +1,40 @@
-#![allow(dead_code)]
-
 use num::Complex;
+
+/// Polynomial of degree N-1
+pub struct Polynomial<const N: usize> {
+    coeff: [f64; N],
+}
+
+impl<const N: usize> Polynomial<N> {
+    pub fn new(coeff: [f64; N]) -> Self {
+        Polynomial { coeff }
+    }
+
+    pub fn from_slice(coeff: &[f64]) -> Self {
+        assert_eq!(coeff.len(), N);
+
+        let mut arr = [0.0; N];
+
+        for i in 0..coeff.len() {
+            arr[i] = coeff[i];
+        }
+
+        Polynomial { coeff: arr }
+    }
+
+    /// Evaluate polynomial at *x* using Horner's method
+    ///
+    /// # References
+    ///  - [Wikipedia: Horner's method](https://en.wikipedia.org/wiki/Horner%27s_method)
+    pub fn eval(&self, x: f64) -> f64 {
+        let mut val = 0.0;
+        for i in (0..N).rev() {
+            val = self.coeff[i] + x * val;
+        }
+
+        val
+    }
+}
 
 /// Calcuate the gamma function of z0 using the Lanczos approximation
 ///
@@ -8,7 +42,7 @@ use num::Complex;
 /// ```
 /// use num::Complex;
 ///
-/// use scialg::func::gamma;
+/// use scialg::function::gamma;
 ///
 /// let tol = 1e-3;
 /// let z = Complex::new(1.0, 0.0);
@@ -65,7 +99,7 @@ pub fn beta(z: Complex<f64>, w: Complex<f64>) -> Complex<f64> {
 ///
 /// # Examples
 /// ```
-/// use scialg::func::factorial;
+/// use scialg::function::factorial;
 ///
 /// assert_eq!(factorial(0), 1);
 /// assert_eq!(factorial(1), 1);
@@ -89,7 +123,7 @@ pub fn factorial(n: i64) -> i64 {
 ///
 /// # Examples
 /// ```
-/// use scialg::func::binomial;
+/// use scialg::function::binomial;
 ///
 /// assert_eq!(binomial(0, 0), 1);
 /// assert_eq!(binomial(0, 1), 0);
@@ -106,4 +140,26 @@ pub fn binomial(n: i64, k: i64) -> i64 {
         return 0;
     }
     factorial(n) / (factorial(k) * factorial(n - k))
+}
+
+/// Calculate the n-th element of the Fibonacci sequence
+///
+/// # Examples
+/// ```
+/// use scialg::function::fibonacci;
+///
+/// assert_eq!(fibonacci(0), 0.0);
+/// assert_eq!(fibonacci(1), 1.0);
+/// assert_eq!(fibonacci(2), 1.0);
+/// assert_eq!(fibonacci(3), 2.0);
+/// assert_eq!(fibonacci(4), 3.0);
+/// assert_eq!(fibonacci(5), 5.0);
+/// assert_eq!(fibonacci(20), 6765.0);
+/// ```
+///
+/// # References
+///  - [Wikipedia: Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_sequence#Computation_by_rounding)
+pub fn fibonacci(n: i32) -> f64 {
+    let phi = 1.618033988749894848204586834365638118_f64;
+    (phi.powi(n) / 5.0_f64.sqrt()).round().try_into().unwrap()
 }

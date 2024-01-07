@@ -36,7 +36,7 @@ pub fn ft(arr: &Array1<f32>) -> Vec<Complex<f32>> {
 ///
 /// # Example
 /// ```
-/// use scialg::fft::bit_reversed;
+/// use scialg::fourier::bit_reversed;
 ///
 /// assert_eq!(bit_reversed(0b100, 3), 0b001);
 /// assert_eq!(bit_reversed(0b110, 3), 0b011);

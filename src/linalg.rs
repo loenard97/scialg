@@ -34,6 +34,7 @@ pub fn transpose<F: Float>(arr: &Array2<F>) -> Array2<F> {
             res[(i, j)] = arr[(j, i)];
         }
     }
+
     res
 }
 

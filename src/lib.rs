@@ -1,5 +1,6 @@
-pub mod fft;
-pub mod func;
+pub mod fourier;
+pub mod function;
+pub mod integration;
 pub mod intpol;
 pub mod linalg;
 pub mod optimize;

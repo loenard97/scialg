@@ -1,10 +1,3 @@
-#[derive(Debug)]
-pub enum Axis {
-    X,
-    Y,
-    Z,
-}
-
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Vector3D {
     pub x: f64,
@@ -13,28 +6,29 @@ pub struct Vector3D {
 }
 
 impl Vector3D {
+    pub const ZERO: Vector3D = Vector3D {
+        x: 0.0,
+        y: 0.0,
+        z: 0.0,
+    };
+    pub const X: Vector3D = Vector3D {
+        x: 1.0,
+        y: 0.0,
+        z: 0.0,
+    };
+    pub const Y: Vector3D = Vector3D {
+        x: 0.0,
+        y: 1.0,
+        z: 0.0,
+    };
+    pub const Z: Vector3D = Vector3D {
+        x: 0.0,
+        y: 0.0,
+        z: 1.0,
+    };
+
     pub fn new(x: f64, y: f64, z: f64) -> Self {
         Vector3D { x, y, z }
-    }
-
-    pub fn from_axis(axis: Axis) -> Self {
-        match axis {
-            Axis::X => Vector3D {
-                x: 1.0,
-                y: 0.0,
-                z: 0.0,
-            },
-            Axis::Y => Vector3D {
-                x: 0.0,
-                y: 1.0,
-                z: 0.0,
-            },
-            Axis::Z => Vector3D {
-                x: 0.0,
-                y: 0.0,
-                z: 1.0,
-            },
-        }
     }
 
     pub fn near_equal(self, other: &Vector3D, tolerance: f64) -> bool {
@@ -77,19 +71,37 @@ impl Vector3D {
         }
     }
 
+    /// Return angle between *self* and *other* in radians
+    ///
+    /// # Example
+    /// ```
+    /// use scialg::vector::Vector3D;
+    ///
+    /// let pi_half = std::f64::consts::FRAC_PI_2;
+    /// let angle = Vector3D::X.angle(&Vector3D::Y);
+    ///
+    /// assert_eq!(angle, pi_half);
+    /// ```
+    pub fn angle(self, other: &Self) -> f64 {
+        let v1 = self.normalize();
+        let v2 = other.normalize();
+
+        v1.scalar_product(&v2).acos()
+    }
+
     /// Return a new vector rotated around *axis* by angle *theta* (in radians)
     ///
     /// # Example
     /// ```
     /// use scialg::vector::{Axis, Vector3D};
     ///
-    /// let v = Vector3D::from_axis(Axis::X);
-    /// let u = Vector3D::from_axis(Axis::Z);
+    /// let v = Vector3D::X;
+    /// let u = Vector3D::Z;
     /// let theta = 0.5 * std::f64::consts::PI;
     ///
     /// let r = v.rotate(u, theta);
     ///
-    /// assert!(r.near_equal(&Vector3D::from_axis(Axis::Y), 1e-7));
+    /// assert!(r.near_equal(&Vector3D::Y, 1e-7));
     /// ```
     pub fn rotate(self, axis: Vector3D, theta: f64) -> Self {
         let u = axis.normalize();
@@ -108,42 +120,18 @@ impl Vector3D {
                 + (t_cos + u.z.powi(2) * (1.0 - t_cos)) * self.z,
         }
     }
+
+    /// Return scalar product between *self* and *other*
+    pub fn scalar_product(self, other: &Self) -> f64 {
+        self.x * other.x + self.y * other.y + self.z * other.z
+    }
+
+    /// Return cross product between *self* and *other*
+    pub fn cross_product(self, other: &Self) -> Self {
+        Vector3D {
+            x: self.y * other.z - self.z * other.y,
+            y: self.z * other.x - self.x * other.z,
+            z: self.x * other.y - self.y * other.x,
+        }
+    }
 }
-
-/*
-    def scalar_product(self, other) -> float:
-        """
-        Scalar Product between self and other
-        """
-        return Vector3D(np.dot(self.coords, other.coords))
-
-    def cross_product(self, other) -> "Vector3D":
-        """
-        Cross Product between self and other
-        """
-        return Vector3D(np.cross(self.coords, other.coords))
-
-    def angle(self, other) -> float:
-        """
-        Angle between self and other in radians
-        """
-        v1 = self.normalize()
-        v2 = other.normalize()
-        return np.arccos(np.clip(np.dot(v1.coords, v2.coords), -1.0, 1.0))
-
-    def project(self, plane) -> "Vector3D":
-        """
-        Project self onto plane
-        """
-        if plane == 'xy':
-            return Vector3D(self.x, self.y, 0)
-
-        if plane == 'xz':
-            return Vector3D(self.x, 0, self.z)
-
-        if plane == 'yz':
-            return Vector3D(0, self.y, self.z)
-
-        raise ValueError('Plane has to be xy, xz or yz')
-
-*/

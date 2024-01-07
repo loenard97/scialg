@@ -1,3 +1,7 @@
+/// Find a local minimum of *f* in *[a, c]* using the Golden-section search
+///
+/// # References
+///  - [Wikipedia: Golden-section search](https://en.wikipedia.org/wiki/Golden-section_search)
 pub fn golden_section(f: fn(f32) -> f32, a: f32, c: f32, tol: f32) -> f32 {
     let phi = 1.618033988749894848204586834365638118_f32;
 
