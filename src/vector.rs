@@ -93,7 +93,7 @@ impl Vector3D {
     ///
     /// # Example
     /// ```
-    /// use scialg::vector::{Axis, Vector3D};
+    /// use scialg::vector::Vector3D;
     ///
     /// let v = Vector3D::X;
     /// let u = Vector3D::Z;

@@ -1,3 +1,4 @@
+pub mod consts;
 pub mod fourier;
 pub mod function;
 pub mod integration;

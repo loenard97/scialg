@@ -28,6 +28,7 @@ impl<const N: usize> Polynomial<N> {
     ///  - [Wikipedia: Horner's method](https://en.wikipedia.org/wiki/Horner%27s_method)
     pub fn eval(&self, x: f64) -> f64 {
         let mut val = 0.0;
+
         for i in (0..N).rev() {
             val = self.coeff[i] + x * val;
         }
@@ -162,4 +163,75 @@ pub fn binomial(n: i64, k: i64) -> i64 {
 pub fn fibonacci(n: i32) -> f64 {
     let phi = 1.618033988749894848204586834365638118_f64;
     (phi.powi(n) / 5.0_f64.sqrt()).round().try_into().unwrap()
+}
+
+/// Calculate the natural logarithm *ln(x)*
+pub fn ln(x: f64, iter: i32) -> f64 {
+    let mut sum = 0.0;
+
+    for i in 0..iter {
+        sum += (-1.0_f64).powi(i + 1) * (x - 1.0).powi(i) / i as f64;
+    }
+
+    return sum;
+}
+
+/// Calculate the square root of *x*
+pub fn sqrt(x: f64, iter: usize) -> f64 {
+    // Newton Method
+    // f(x) = y^2 - x
+    // f'(x) = 2*y
+    let mut y = 1.0;
+
+    for _ in 0..iter {
+        y = y - (y * y - x) / (2.0 * y);
+    }
+
+    return y;
+}
+
+pub fn pow(x: f64, n: i32) -> f64 {
+    if n == 0 {
+        return 1.0;
+    }
+
+    let t = pow(x, n / 2);
+
+    if n % 2 == 0 {
+        return t * t;
+    } else {
+        return x * t * t;
+    }
+}
+
+pub fn sin(x: f64, iter: i32) -> f64 {
+    let pi_2 = 2.0 * std::f64::consts::PI;
+    let mut y = 0.0;
+    let mut x = x;
+
+    while x > pi_2 {
+        x -= pi_2;
+    }
+
+    for i in (1..iter).step_by(2) {
+        y += (-1.0_f64).powf(i as f64 / 2.0) / factorial(i as i64) as f64 * x.powi(i);
+    }
+
+    return y;
+}
+
+pub fn cos(x: f64, iter: i32) -> f64 {
+    let pi_2 = 2.0 * std::f64::consts::PI;
+    let mut y = 1.0;
+    let mut x = x;
+
+    while x > pi_2 {
+        x -= pi_2;
+    }
+
+    for i in (2..iter).step_by(2) {
+        y += (-1.0_f64).powf(i as f64 / 2.0) / factorial(i as i64) as f64 * x.powi(i);
+    }
+
+    return y;
 }
