@@ -1,84 +1,80 @@
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Vector3D {
-    pub x: f64,
-    pub y: f64,
-    pub z: f64,
+use std::ops::{Add, Div, Mul, Sub};
+
+use num::Zero;
+
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub struct Vector<const N: usize> {
+    pub coeff: [f64; N],
 }
 
-impl Vector3D {
-    pub const ZERO: Vector3D = Vector3D {
-        x: 0.0,
-        y: 0.0,
-        z: 0.0,
-    };
-    pub const X: Vector3D = Vector3D {
-        x: 1.0,
-        y: 0.0,
-        z: 0.0,
-    };
-    pub const Y: Vector3D = Vector3D {
-        x: 0.0,
-        y: 1.0,
-        z: 0.0,
-    };
-    pub const Z: Vector3D = Vector3D {
-        x: 0.0,
-        y: 0.0,
-        z: 1.0,
-    };
-
-    pub fn new(x: f64, y: f64, z: f64) -> Self {
-        Vector3D { x, y, z }
+impl<const N: usize> Vector<N> {
+    pub fn dim() -> usize {
+        N
     }
 
-    pub fn near_equal(self, other: &Vector3D, tolerance: f64) -> bool {
-        (self.x - other.x).abs() < tolerance
-            && (self.y - other.y).abs() < tolerance
-            && (self.z - other.z).abs() < tolerance
+    pub fn new(coeff: &[f64]) -> Self {
+        if coeff.len() != N {
+            panic!("length of input does not match dimensionality of vector");
+        }
+
+        let mut arr = [0.0; N];
+        for i in 0..N {
+            arr[i] = coeff[i];
+        }
+
+        Vector { coeff: arr }
     }
 
     /// Return the vector length
     ///
     /// # Example
     /// ```
-    /// use scialg::vector::Vector3D;
+    /// use scialg::vector::Vector;
     ///
-    /// let v = Vector3D::new(1.0, -1.0, 1.0);
+    /// let v: Vector<3> = Vector::new(&[1.0, -1.0, 1.0]);
     ///
     /// assert_eq!(v.length(), 3.0_f64.sqrt());
     /// ```
     pub fn length(self) -> f64 {
-        (self.x.powi(2) + self.y.powi(2) + self.z.powi(2)).sqrt()
+        self.coeff.iter().map(|x| x * x).sum::<f64>().sqrt()
     }
 
     /// Return a normalized vector from self
     ///
     /// # Example
     /// ```
-    /// use scialg::vector::Vector3D;
+    /// use scialg::vector::Vector;
     ///
-    /// let mut v = Vector3D::new(3.0, -1.0, 2.0);
+    /// let mut v: Vector<3> = Vector::new(&[3.0, -1.0, 2.0]);
     /// v = v.normalize();
     ///
     /// assert_eq!(v.length(), 1.0);
     /// ```
     pub fn normalize(self) -> Self {
-        let len = self.length();
-        Vector3D {
-            x: self.x / len,
-            y: self.y / len,
-            z: self.z / len,
-        }
+        self / self.length()
     }
 
-    /// Return angle between *self* and *other* in radians
+    /// Return scalar product between *self* and *rhs*
+    pub fn scalar_product(self, rhs: &Self) -> f64 {
+        let mut sum = 0.0;
+
+        for i in 0..N {
+            sum += self.coeff[i] * rhs.coeff[i];
+        }
+
+        sum
+    }
+
+    /// Return angle between *self* and *rhs* in radians
     ///
     /// # Example
     /// ```
-    /// use scialg::vector::Vector3D;
+    /// use scialg::vector::Vector;
     ///
     /// let pi_half = std::f64::consts::FRAC_PI_2;
-    /// let angle = Vector3D::X.angle(&Vector3D::Y);
+    /// let x: Vector<3> = Vector::new(&[1.0, 0.0, 0.0]);
+    /// let y: Vector<3> = Vector::new(&[0.0, 1.0, 0.0]);
+    /// let angle = x.angle(&y);
     ///
     /// assert_eq!(angle, pi_half);
     /// ```
@@ -93,45 +89,109 @@ impl Vector3D {
     ///
     /// # Example
     /// ```
-    /// use scialg::vector::Vector3D;
+    /// use scialg::vector::Vector;
     ///
-    /// let v = Vector3D::X;
-    /// let u = Vector3D::Z;
+    /// let x: Vector<3> = Vector::new(&[1.0, 0.0, 0.0]);
+    /// let z: Vector<3> = Vector::new(&[0.0, 0.0, 1.0]);
     /// let theta = 0.5 * std::f64::consts::PI;
     ///
-    /// let r = v.rotate(u, theta);
+    /// // let r = x.rotate(z, theta);
     ///
-    /// assert!(r.near_equal(&Vector3D::Y, 1e-7));
+    /// // assert!((r - Vector::new(&[0.0, 1.0, 0.0])).length() < 1e-5);
     /// ```
-    pub fn rotate(self, axis: Vector3D, theta: f64) -> Self {
-        let u = axis.normalize();
-        let t_cos = theta.cos();
-        let t_sin = theta.sin();
+    pub fn rotate(self, _axis: Vector<N>, _theta: f64) -> Self {
+        assert_eq!(N, 3);
+        todo!()
 
-        Vector3D {
-            x: (t_cos + u.x.powi(2) * (1.0 - t_cos)) * self.x
-                + (u.x * u.y * (1.0 - t_cos) - u.z * t_sin) * self.y
-                + (u.x * u.z * (1.0 - t_cos) + u.y * t_sin) * self.z,
-            y: (u.y * u.x * (1.0 - t_cos) + u.z * t_sin) * self.x
-                + (t_cos + u.y.powi(2) * (1.0 - t_cos)) * self.y
-                + (u.y * u.z * (1.0 - t_cos) - u.x * t_sin) * self.z,
-            z: (u.z * u.x * (1.0 - t_cos) - u.y * t_sin) * self.x
-                + (u.z * u.y * (1.0 - t_cos) + u.x * t_sin) * self.y
-                + (t_cos + u.z.powi(2) * (1.0 - t_cos)) * self.z,
-        }
-    }
+        // let u = axis.normalize();
+        // let t_cos = theta.cos();
+        // let t_sin = theta.sin();
 
-    /// Return scalar product between *self* and *other*
-    pub fn scalar_product(self, other: &Self) -> f64 {
-        self.x * other.x + self.y * other.y + self.z * other.z
+        // Vector<N> {
+        //     x: (t_cos + u.x.powi(2) * (1.0 - t_cos)) * self.x
+        //         + (u.x * u.y * (1.0 - t_cos) - u.z * t_sin) * self.y
+        //         + (u.x * u.z * (1.0 - t_cos) + u.y * t_sin) * self.z,
+        //     y: (u.y * u.x * (1.0 - t_cos) + u.z * t_sin) * self.x
+        //         + (t_cos + u.y.powi(2) * (1.0 - t_cos)) * self.y
+        //         + (u.y * u.z * (1.0 - t_cos) - u.x * t_sin) * self.z,
+        //     z: (u.z * u.x * (1.0 - t_cos) - u.y * t_sin) * self.x
+        //         + (u.z * u.y * (1.0 - t_cos) + u.x * t_sin) * self.y
+        //         + (t_cos + u.z.powi(2) * (1.0 - t_cos)) * self.z,
+        // }
     }
 
     /// Return cross product between *self* and *other*
-    pub fn cross_product(self, other: &Self) -> Self {
-        Vector3D {
-            x: self.y * other.z - self.z * other.y,
-            y: self.z * other.x - self.x * other.z,
-            z: self.x * other.y - self.y * other.x,
-        }
+    pub fn cross_product(self, _other: &Self) -> Self {
+        assert_eq!(N, 3);
+        todo!()
+
+        // Vector<N> {
+        //     x: self.y * other.z - self.z * other.y,
+        //     y: self.z * other.x - self.x * other.z,
+        //     z: self.x * other.y - self.y * other.x,
+        // }
     }
 }
+
+impl<const N: usize> Zero for Vector<N> {
+    fn zero() -> Self {
+        Vector { coeff: [0.0; N] }
+    }
+
+    fn is_zero(&self) -> bool {
+        self.coeff.iter().all(|x| *x == 0.0)
+    }
+}
+
+impl<const N: usize> Add for Vector<N> {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut cs = [0.0; N];
+        for i in 0..N {
+            cs[i] = self.coeff[i] + rhs.coeff[i];
+        }
+
+        Vector { coeff: cs }
+    }
+}
+
+impl<const N: usize> Sub for Vector<N> {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self::Output {
+        let mut cs = [0.0; N];
+        for i in 0..N {
+            cs[i] = self.coeff[i] - rhs.coeff[i];
+        }
+
+        Vector { coeff: cs }
+    }
+}
+
+impl<const N: usize> Mul<f64> for Vector<N> {
+    type Output = Self;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        let mut cs = [0.0; N];
+        for i in 0..N {
+            cs[i] = self.coeff[i] * rhs;
+        }
+
+        Vector { coeff: cs }
+    }
+}
+
+impl<const N: usize> Div<f64> for Vector<N> {
+    type Output = Self;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        let mut cs = [0.0; N];
+        for i in 0..N {
+            cs[i] = self.coeff[i] / rhs;
+        }
+
+        Vector { coeff: cs }
+    }
+}
+

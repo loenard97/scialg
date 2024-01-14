@@ -81,15 +81,14 @@ pub fn insertion<T: PartialOrd>(arr: &mut [T]) {
 pub fn shell<T: PartialOrd>(arr: &mut [T]) {
     let mut inc = 1;
     while inc <= arr.len() {
-        inc *= 3;
-        inc += 1;
+        inc = 3 * inc + 1;
     }
 
     while inc >= 1 {
         inc /= 3;
         for i in inc..arr.len() {
             let mut j = i;
-            while arr[j - inc] > arr[j] {
+            while arr[j] < arr[j - inc] {
                 arr.swap(j, j - inc);
                 j -= inc;
                 if j < inc {

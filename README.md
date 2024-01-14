@@ -20,7 +20,7 @@ It includes modules for
  - Optimization
  - Root finding
  - Sorting
- - 3D Vector math
+ - Vector math
 
 I only wrote them for educational purposes, so I give no guarantees for correctness or usefulness.
 I added links to references where you can learn more about each algorithm where applicable.
