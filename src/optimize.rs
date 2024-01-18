@@ -95,8 +95,8 @@ pub fn nelder_mead<const N: usize>(
         // reflect
         let xr = x0 + (x0 - xs[N]) * alpha;
         let fr = f(xr);
-        if fs[0] <= fr && fr <= fs[1] {
-            xs[2] = xr;
+        if fs[0] <= fr && fr <= fs[N - 1] {
+            xs[N] = xr;
             continue;
         }
 
@@ -105,28 +105,28 @@ pub fn nelder_mead<const N: usize>(
             let xe = x0 + (xr - x0) * gamma;
             let fe = f(xe);
             if fe < fr {
-                xs[1] = xe;
+                xs[N] = xe;
             } else {
-                xs[1] = xr;
+                xs[N] = xr;
             }
             continue;
         }
 
         // contract
-        if fr < fs[2] {
+        if fr < fs[N] {
             // contract outside
             let xc = x0 + (xr - x0) * rho;
             let fc = f(xc);
             if fc < fr {
-                xs[2] = xc;
+                xs[N] = xc;
                 continue;
             }
         } else {
             // contract inside
             let xc = x0 + (xs[N] - x0) * rho;
             let fc = f(xc);
-            if fc < fs[2] {
-                xs[2] = xc;
+            if fc < fs[N] {
+                xs[N] = xc;
                 continue;
             }
         }

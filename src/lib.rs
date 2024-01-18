@@ -7,4 +7,5 @@ pub mod linalg;
 pub mod optimize;
 pub mod root;
 pub mod sort;
+pub mod statistic;
 pub mod vector;

@@ -20,9 +20,6 @@ It includes modules for
  - Optimization
  - Root finding
  - Sorting
+ - Statistics
  - Vector math
-
-I only wrote them for educational purposes, so I give no guarantees for correctness or usefulness.
-I added links to references where you can learn more about each algorithm where applicable.
-Feel free to browse and copy paste things if you are interested in learning more about these algorithms.
 
