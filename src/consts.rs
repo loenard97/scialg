@@ -1,3 +1,5 @@
+//! Evaluation algorithms for mathematical constants
+
 use super::function;
 
 /// Compute *pi* using the Gauss-Legendre algorithm

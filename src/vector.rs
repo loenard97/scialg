@@ -1,3 +1,5 @@
+//! Vector algebra
+
 use std::ops::{Add, Div, Mul, Sub};
 
 use num::Zero;
@@ -194,4 +196,3 @@ impl<const N: usize> Div<f64> for Vector<N> {
         Vector { coeff: cs }
     }
 }
-

@@ -1,3 +1,5 @@
+//! Evaluation algorithms for functions
+
 use num::Complex;
 
 /// Polynomial of degree N-1

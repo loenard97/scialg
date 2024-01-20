@@ -1,3 +1,5 @@
+//! Linear algebra algorithms
+
 use ndarray::Array2;
 use num::Float;
 

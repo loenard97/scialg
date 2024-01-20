@@ -1,3 +1,5 @@
+//! Minimization of functions
+
 use num::Zero;
 
 use crate::vector::Vector;

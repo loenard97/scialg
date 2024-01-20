@@ -1,3 +1,5 @@
+//! Root finding of functions
+
 use std::mem::swap;
 
 /// Find the root of f in [a, b] using the Bisection method

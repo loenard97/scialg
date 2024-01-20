@@ -1,3 +1,5 @@
+//! Fourier analysis
+
 use ndarray::Array1;
 use num::complex::Complex;
 

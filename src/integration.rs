@@ -1,3 +1,5 @@
+//! Evaluation algorithms for integrals of functions
+
 /// Evaluate the integral of f in [a, b] with step size h using the Trapezoid rule
 ///
 /// # Panics

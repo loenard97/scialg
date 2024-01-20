@@ -1,3 +1,5 @@
+//! Statistical modeling of datasets
+
 /// Calculate the mean of a dataset *xs*
 pub fn mean(xs: &[f64]) -> f64 {
     let n = xs.len() as f64;

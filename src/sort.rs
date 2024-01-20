@@ -1,3 +1,5 @@
+//! Sorting algorithms for onedimensional datasets
+
 /// Returns true only if *arr* is in ascending partial order
 ///
 /// # Example

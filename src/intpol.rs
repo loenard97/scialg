@@ -1,4 +1,5 @@
-/// Interpolation (and extrapolation) algorithms
+//! Interpolation (and extrapolation) of errorless datasets
+
 use num::Float;
 
 /// Interpolate a dataset *f(xs)->ys* at point *x* using Neville interpolation
