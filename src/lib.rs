@@ -18,6 +18,7 @@ pub mod integration;
 pub mod intpol;
 pub mod linalg;
 pub mod model;
+pub mod ode;
 pub mod optimize;
 pub mod root;
 pub mod sort;

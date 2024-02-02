@@ -1,6 +1,6 @@
 //! Linear algebra algorithms
 
-use ndarray::Array2;
+use ndarray::prelude::*;
 use num::Float;
 
 /// Gaussian Elimination
@@ -26,6 +26,7 @@ pub fn gauss_jordan<F: Float>(arr: &mut Array2<F>) {
     }
 }
 
+/// Return the transpose of *arr*
 pub fn transpose<F: Float>(arr: &Array2<F>) -> Array2<F> {
     let ni = arr.shape()[0];
     let nj = arr.shape()[1];
@@ -38,6 +39,22 @@ pub fn transpose<F: Float>(arr: &Array2<F>) -> Array2<F> {
     }
 
     res
+}
+
+/// Return the inverse of *arr*
+///
+/// # Panics
+/// Panics if arr is not a square matrix
+pub fn invert<F: Float>(arr: &Array2<F>) -> Array2<F> {
+    assert!(arr.is_square());
+    let n = arr.shape()[0];
+    let identity: Array2<F> = Array2::from_diag_elem(n, F::one());
+
+    let mut stacked =
+        ndarray::concatenate(ndarray::Axis(1), &[arr.view(), identity.view()]).unwrap();
+    gauss_jordan(&mut stacked);
+
+    stacked.slice(s![.., n..]).to_owned()
 }
 
 #[cfg(test)]
@@ -71,5 +88,14 @@ mod tests {
             Array::from_shape_vec((3, 2), vec![1.0, 4.0, 2.0, 5.0, 3.0, 6.0]).unwrap();
 
         assert_eq!(transpose(&input), output);
+    }
+
+    #[test]
+    fn test_invert() {
+        let input: Array2<f64> = Array2::from_shape_vec((2, 2), vec![2.0, 3.0, 2.0, 2.0]).unwrap();
+        let output: Array2<f64> =
+            Array2::from_shape_vec((2, 2), vec![-1.0, 1.5, 1.0, -1.0]).unwrap();
+
+        assert_eq!(invert(&input), output);
     }
 }
