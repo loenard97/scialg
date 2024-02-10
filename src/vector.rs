@@ -1,6 +1,6 @@
 //! Vector algebra
 
-use std::ops::{Add, Div, Mul, Sub};
+use std::ops::{Add, Div, Index, Mul, Sub};
 
 use num::Zero;
 
@@ -10,19 +10,15 @@ pub struct Vector<const N: usize> {
 }
 
 impl<const N: usize> Vector<N> {
-    pub fn dim() -> usize {
+    pub fn dim(self) -> usize {
         N
     }
 
     pub fn new(coeff: &[f64]) -> Self {
-        if coeff.len() != N {
-            panic!("length of input does not match dimensionality of vector");
-        }
+        assert_eq!(coeff.len(), N, "length of input does not match dimensions of vector");
 
         let mut arr = [0.0; N];
-        for i in 0..N {
-            arr[i] = coeff[i];
-        }
+        arr.copy_from_slice(coeff);
 
         Vector { coeff: arr }
     }
@@ -194,5 +190,13 @@ impl<const N: usize> Div<f64> for Vector<N> {
         }
 
         Vector { coeff: cs }
+    }
+}
+
+impl<const N: usize> Index<usize> for Vector<N> {
+    type Output = f64;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self.coeff[index]
     }
 }

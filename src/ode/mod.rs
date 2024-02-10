@@ -1,15 +1,16 @@
+mod controller;
 mod stepper;
 
 use crate::vector::Vector;
 use stepper::*;
 
-
+/// Interface for solving ordinary differential equations
 pub struct ODESolver<const N: usize> {
     pub steps: usize,
     pub step_size: f64,
     pub cur_step: Vector<N>,
-    pub ode: fn(Vector<N>) -> Vector<N>,
-    pub stepper: StepperMethod,
+    pub ode: fn(f64, Vector<N>) -> Vector<N>,
+    pub stepper: Box<dyn Stepper>,
 }
 
 impl<const N: usize> ODESolver<N> {
@@ -17,36 +18,28 @@ impl<const N: usize> ODESolver<N> {
         steps: usize,
         step_size: f64,
         p0: Vector<N>,
-        ode: fn(Vector<N>) -> Vector<N>,
+        ode: fn(f64, Vector<N>) -> Vector<N>,
         stepper: StepperMethod,
     ) -> Self {
+        let stepper_struct: Box<dyn Stepper> = match stepper {
+            StepperMethod::Euler => Box::new(Euler::new(step_size, p0, ode)),
+            StepperMethod::Midpoint => Box::new(Midpoint::new(step_size, p0, ode)),
+            StepperMethod::RungeKutta => Box::new(RungeKutta::new(step_size, p0, ode)),
+            StepperMethod::DormandPrince => Box::new(DormandPrince::new(step_size, p0, ode)),
+        };
+
         ODESolver {
             steps,
             step_size,
             cur_step: p0,
             ode,
-            stepper,
+            stepper: stepper_struct,
         }
     }
-}
 
-impl<const N: usize> Iterator for ODESolver<N> {
-    type Item = Vector<N>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.steps == 0 {
-            return None;
-        }
-
-        let stepper_fn = match self.stepper {
-            StepperMethod::Euler => euler::<N>,
-            StepperMethod::Midpoint => midpoint::<N>,
-            StepperMethod::RungeKutta => runge_kutta::<N>,
-        };
-        self.cur_step = stepper_fn(self.ode, self.cur_step, self.step_size);
+    pub fn run(&mut self) {
+        self.stepper.step();
         self.steps -= 1;
-
-        Some(self.cur_step)
     }
 }
 
@@ -59,13 +52,10 @@ mod tests {
         let steps = 300;
         let step_size = 0.001;
         let p0 = Vector::new(&[0.0, 1.5, 1.0, 1.0]);
-        let gravity = |x: Vector<4>| Vector::new(&[x.coeff[2], x.coeff[3], 0.0, -9.81]);
+        let gravity = |_: f64, x: Vector<4>| Vector::new(&[x[2], x[3], 0.0, -9.81]);
         let stepper_method = StepperMethod::RungeKutta;
 
-        let solver = ODESolver::new(steps, step_size, p0, gravity, stepper_method);
-
-        for x in solver {
-            println!("{:?}", x);
-        }
+        let mut solver = ODESolver::new(steps, step_size, p0, gravity, stepper_method);
+        solver.run();
     }
 }
