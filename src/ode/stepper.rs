@@ -34,8 +34,8 @@ impl<const N: usize> StepperData<N> {
     }
 }
 
-pub trait Stepper {
-    fn step(&mut self);
+pub trait Stepper<const N: usize> {
+    fn step(&mut self) -> Vector<N>;
 }
 
 /// Euler method
@@ -55,9 +55,10 @@ impl<const N: usize> Euler<N> {
     }
 }
 
-impl<const N: usize> Stepper for Euler<N> {
-    fn step(&mut self) {
+impl<const N: usize> Stepper<N> for Euler<N> {
+    fn step(&mut self) -> Vector<N> {
         self.data.y_cur = self.dy(self.data.h_cur);
+        self.data.y_cur
     }
 }
 
@@ -81,9 +82,10 @@ impl<const N: usize> Midpoint<N> {
     }
 }
 
-impl<const N: usize> Stepper for Midpoint<N> {
-    fn step(&mut self) {
+impl<const N: usize> Stepper<N> for Midpoint<N> {
+    fn step(&mut self) -> Vector<N> {
         self.data.y_cur = self.dy(self.data.h_cur);
+        self.data.y_cur
     }
 }
 
@@ -109,9 +111,10 @@ impl<const N: usize> RungeKutta<N> {
     }
 }
 
-impl<const N: usize> Stepper for RungeKutta<N> {
-    fn step(&mut self) {
+impl<const N: usize> Stepper<N> for RungeKutta<N> {
+    fn step(&mut self) -> Vector<N> {
         self.data.y_cur = self.dy(self.data.h_cur);
+        self.data.y_cur
     }
 }
 
@@ -285,8 +288,8 @@ impl<const N: usize> DormandPrince<N> {
     }
 }
 
-impl<const N: usize> Stepper for DormandPrince<N> {
-    fn step(&mut self) {
+impl<const N: usize> Stepper<N> for DormandPrince<N> {
+    fn step(&mut self) -> Vector<N> {
         loop {
             self.dy();
             let err = self.error();
@@ -303,5 +306,7 @@ impl<const N: usize> Stepper for DormandPrince<N> {
         self.h_did = self.data.h_cur;
         self.x += self.h_did;
         self.h_next = self.controller.h_next;
+
+        self.y
     }
 }
