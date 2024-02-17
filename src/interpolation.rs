@@ -6,7 +6,7 @@ use num::Float;
 ///
 /// # Example
 /// ```
-/// use scialg::intpol::neville;
+/// use scialg::interpolation::neville;
 ///
 /// let xs = vec![-1.0, 0.0, 1.0];
 /// let ys = vec![2.0, 0.0, 2.0];

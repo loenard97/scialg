@@ -1,9 +1,13 @@
 //! This crate is a collection of common algorithms used in data science written in pure rust.
 //! It includes modules for
+//!  - Evaluation of constants
+//!  - Filter functions
 //!  - Fourier analysis
 //!  - Special function evaluations
+//!  - Integration
 //!  - Inter- (and extra)polation
 //!  - Linear algebra
+//!  - Differential equations
 //!  - Optimization
 //!  - Root finding
 //!  - Sorting
@@ -15,7 +19,7 @@ pub mod filter;
 pub mod fourier;
 pub mod function;
 pub mod integration;
-pub mod intpol;
+pub mod interpolation;
 pub mod linalg;
 pub mod model;
 pub mod ode;

@@ -1,8 +1,14 @@
+//! Ordinary differential equation solver
+
 mod controller;
 pub mod stepper;
 
 use crate::vector::Vector;
-use stepper::*;
+use crate::ode::stepper::{Stepper, StepperMethod};
+use crate::ode::stepper::dormand_prince::DormandPrince;
+use crate::ode::stepper::euler::Euler;
+use crate::ode::stepper::midpoint::Midpoint;
+use crate::ode::stepper::runge_kutta::RungeKutta;
 
 /// Interface for solving ordinary differential equations
 pub struct ODESolver<const N: usize> {
