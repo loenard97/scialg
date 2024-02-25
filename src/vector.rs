@@ -15,7 +15,11 @@ impl<const N: usize> Vector<N> {
     }
 
     pub fn new(coeff: &[f64]) -> Self {
-        assert_eq!(coeff.len(), N, "length of input does not match dimensions of vector");
+        assert_eq!(
+            coeff.len(),
+            N,
+            "length of input does not match dimensions of vector"
+        );
 
         let mut arr = [0.0; N];
         arr.copy_from_slice(coeff);

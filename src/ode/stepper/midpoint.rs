@@ -27,5 +27,3 @@ impl<const N: usize> Stepper<N> for Midpoint<N> {
         self.data.y_cur
     }
 }
-
-

@@ -1,5 +1,5 @@
-use crate::ode::stepper::{Stepper, StepperData};
 use crate::ode::controller::Controller;
+use crate::ode::stepper::{Stepper, StepperData};
 use crate::vector::Vector;
 
 use num::Zero;

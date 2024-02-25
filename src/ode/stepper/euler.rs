@@ -24,5 +24,3 @@ impl<const N: usize> Stepper<N> for Euler<N> {
         self.data.y_cur
     }
 }
-
-

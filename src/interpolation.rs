@@ -29,3 +29,36 @@ pub fn neville<F: Float>(xs: &[F], ys: &[F], x: F) -> F {
 
     q[0]
 }
+
+/// Linear interpolation of dataset *f(xs) -> ys* at point *x*
+///
+/// # Example
+/// ```
+/// use scialg::interpolation::linear;
+///
+/// let xs = vec![0.0, 2.0];
+/// let ys = vec![1.0, 0.5];
+///
+/// assert_eq!(linear(&xs, &ys, 1.0), 0.75);
+/// ```
+pub fn linear<F: Float>(xs: &[F], ys: &[F], x: F) -> F {
+    let idx = xs.binary_search_by(|v| v.partial_cmp(&x).unwrap());
+
+    match idx {
+        Ok(i) => ys[i],
+        Err(i) => ys[i - 1] + x * (ys[i] - ys[i - 1]) / (xs[i] - xs[i - 1]),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_interpolation_linear() {
+        let xs = vec![0.0, 2.0];
+        let ys = vec![1.0, 2.0];
+
+        assert_eq!(linear(&xs, &ys, 1.0), 1.5);
+    }
+}

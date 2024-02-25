@@ -40,7 +40,7 @@ impl Controller {
         // truncation error too large
         let scale = f64::max(safe * err.powf(-alpha), min_scale);
         self.rejected = true;
-        
+
         (false, h * scale)
     }
 }

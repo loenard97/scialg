@@ -29,5 +29,3 @@ impl<const N: usize> Stepper<N> for RungeKutta<N> {
         self.data.y_cur
     }
 }
-
-
