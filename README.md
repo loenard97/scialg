@@ -11,7 +11,7 @@ A collection of scientific algorithms
 
 # Contents
 
-This crate is a collection of common algorithms used in data science written in pure rust.
+This crate is a collection of common algorithms used in data science written in pure Rust.
 It includes modules for
  - Evaluation of constants
  - Filter functions
@@ -20,6 +20,7 @@ It includes modules for
  - Integration
  - Inter- (and extra)polation
  - Linear algebra
+ - Dataset modelling (aka fitting)
  - Differential equations
  - Optimization
  - Root finding

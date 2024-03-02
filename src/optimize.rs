@@ -33,7 +33,7 @@ pub fn golden_section(f: fn(f32) -> f32, a: f32, c: f32, tol: f32) -> f32 {
         }
     }
 
-    return (b + a) / 2.0;
+    (b + a) / 2.0
 }
 
 fn co_sort<O: PartialOrd, T>(arr: &mut [O], co_arr: &mut [T]) {

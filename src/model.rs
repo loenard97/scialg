@@ -28,7 +28,7 @@ pub fn linear_regression(xs: &[f64], ys: &[f64], yerrs: &[f64]) -> (f64, f64, f6
     let mut sy = 0.0;
 
     for i in 0..xs.len() {
-        let wt = 1.0 / (yerrs[i] * yerrs[i]);
+        let wt = yerrs[i].powi(-2);
         ss += wt;
         sx += wt * xs[i];
         sy += wt * ys[i];
@@ -36,17 +36,17 @@ pub fn linear_regression(xs: &[f64], ys: &[f64], yerrs: &[f64]) -> (f64, f64, f6
 
     let sxoss = sx / ss;
 
-    let mut st2 = 0.0;
+    let mut stt = 0.0;
     let mut b = 0.0;
     for i in 0..xs.len() {
         let t = (xs[i] - sxoss) / yerrs[i];
-        st2 += t * t;
+        stt += t * t;
         b += t * ys[i] / yerrs[i];
     }
-    b /= st2;
+    b /= stt;
     let a = (sy - sx * b) / ss;
-    let siga = ((1.0 + sx * sx / (ss * st2)) / ss).sqrt();
-    let sigb = (1.0 / st2).sqrt();
+    let siga = ((1.0 + sx * sx / (ss * stt)) / ss).sqrt();
+    let sigb = (1.0 / stt).sqrt();
 
     let mut chi2 = 0.0;
     for i in 0..xs.len() {

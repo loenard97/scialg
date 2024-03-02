@@ -27,7 +27,8 @@ pub fn pi_gauss_legendre(iter: usize) -> f64 {
         p = 2.0 * p;
         a = a_n;
     }
-    return (a + b) * (a + b) / (4.0 * t);
+
+    (a + b) * (a + b) / (4.0 * t)
 }
 
 /// Calculate *e* using a series
@@ -49,5 +50,5 @@ pub fn e_factorial(iter: i64) -> f64 {
         sum += 1.0 / function::factorial(i) as f64;
     }
 
-    return sum;
+    sum
 }

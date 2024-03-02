@@ -85,7 +85,8 @@ pub fn gamma(z0: Complex<f64>) -> Complex<f64> {
         x += coeffs[i] / (z + i as f64);
     }
     let t = z + 7.5;
-    return f64::sqrt(2.0 * pi) * t.powc(z + 0.5) * (-t).exp() * x;
+    
+    f64::sqrt(2.0 * pi) * t.powc(z + 0.5) * (-t).exp() * x
 }
 
 /// Calcuate the beta function of (z, w)
@@ -119,7 +120,7 @@ pub fn factorial(n: i64) -> i64 {
     let z: Complex<f64> = Complex::new((n + 1) as f64, 0.0);
     let res = gamma(z);
 
-    return res.re.round() as i64;
+    res.re.round() as i64
 }
 
 /// Calculate the binomial distribution of (n k)
@@ -142,6 +143,7 @@ pub fn binomial(n: i64, k: i64) -> i64 {
     if k > n {
         return 0;
     }
+
     factorial(n) / (factorial(k) * factorial(n - k))
 }
 
@@ -164,6 +166,7 @@ pub fn binomial(n: i64, k: i64) -> i64 {
 ///  - [Wikipedia: Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_sequence#Computation_by_rounding)
 pub fn fibonacci(n: i32) -> f64 {
     let phi = 1.618033988749894848204586834365638118_f64;
+
     (phi.powi(n) / 5.0_f64.sqrt()).round().try_into().unwrap()
 }
 
@@ -175,7 +178,7 @@ pub fn ln(x: f64, iter: i32) -> f64 {
         sum += (-1.0_f64).powi(i + 1) * (x - 1.0).powi(i) / i as f64;
     }
 
-    return sum;
+    sum
 }
 
 /// Calculate the square root of *x*
@@ -189,7 +192,7 @@ pub fn sqrt(x: f64, iter: usize) -> f64 {
         y = y - (y * y - x) / (2.0 * y);
     }
 
-    return y;
+    y
 }
 
 pub fn pow(x: f64, n: i32) -> f64 {
@@ -200,9 +203,9 @@ pub fn pow(x: f64, n: i32) -> f64 {
     let t = pow(x, n / 2);
 
     if n % 2 == 0 {
-        return t * t;
+        t * t
     } else {
-        return x * t * t;
+        x * t * t
     }
 }
 
@@ -219,7 +222,7 @@ pub fn sin(x: f64, iter: i32) -> f64 {
         y += (-1.0_f64).powf(i as f64 / 2.0) / factorial(i as i64) as f64 * x.powi(i);
     }
 
-    return y;
+    y
 }
 
 pub fn cos(x: f64, iter: i32) -> f64 {
@@ -235,5 +238,5 @@ pub fn cos(x: f64, iter: i32) -> f64 {
         y += (-1.0_f64).powf(i as f64 / 2.0) / factorial(i as i64) as f64 * x.powi(i);
     }
 
-    return y;
+    y
 }
