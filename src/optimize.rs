@@ -2,6 +2,7 @@
 
 use num::Zero;
 
+use crate::sort::co_sort;
 use crate::vector::Vector;
 
 /// Find a local minimum of *f* in *[a, c]* using the Golden-section search
@@ -34,17 +35,6 @@ pub fn golden_section(f: fn(f32) -> f32, a: f32, c: f32, tol: f32) -> f32 {
     }
 
     (b + a) / 2.0
-}
-
-fn co_sort<O: PartialOrd, T>(arr: &mut [O], co_arr: &mut [T]) {
-    for i in 1..arr.len() {
-        let mut j = i;
-        while j > 0 && arr[j] < arr[j - 1] {
-            arr.swap(j, j - 1);
-            co_arr.swap(j, j - 1);
-            j -= 1;
-        }
-    }
 }
 
 /// Find a local minima of *f* using the Nelder-Mead algorithm starting at *p0*

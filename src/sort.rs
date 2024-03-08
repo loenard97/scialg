@@ -85,6 +85,18 @@ pub fn insertion<T: PartialOrd>(arr: &mut [T]) {
     }
 }
 
+/// Cosort two arrays
+pub fn co_sort<O: PartialOrd, T>(arr: &mut [O], co_arr: &mut [T]) {
+    for i in 1..arr.len() {
+        let mut j = i;
+        while j > 0 && arr[j] < arr[j - 1] {
+            arr.swap(j, j - 1);
+            co_arr.swap(j, j - 1);
+            j -= 1;
+        }
+    }
+}
+
 /// Sort *arr* inplace using Shell sort.
 ///
 /// # Example

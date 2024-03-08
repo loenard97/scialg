@@ -3,6 +3,7 @@
 use num::Complex;
 
 /// Polynomial of degree N-1
+#[derive(Debug, Copy, Clone)]
 pub struct Polynomial<const N: usize> {
     coeff: [f64; N],
 }
@@ -85,7 +86,7 @@ pub fn gamma(z0: Complex<f64>) -> Complex<f64> {
         x += coeffs[i] / (z + i as f64);
     }
     let t = z + 7.5;
-    
+
     f64::sqrt(2.0 * pi) * t.powc(z + 0.5) * (-t).exp() * x
 }
 
